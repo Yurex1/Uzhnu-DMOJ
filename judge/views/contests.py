@@ -23,8 +23,8 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import DetailView, SingleObjectMixin, View
+from django.views.generic import ListView, TemplateView, View
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import BaseListView
 from icalendar import Calendar as ICalendar, Event
 from reversion import revisions
@@ -293,6 +293,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
                 problem_count=Count('id'),
             ),
         )
+        context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
+        context['enable_social'] = settings.DMOJ_ENABLE_SOCIAL
         return context
 
 
@@ -677,7 +679,8 @@ def base_contest_ranking_list(contest, problems, queryset):
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                      .prefetch_related('user__organizations')
-                                     .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker'))
+                                     .annotate(submission_cnt=Count('submission'))
+                                     .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker', '-submission_cnt'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,

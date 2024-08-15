@@ -45,7 +45,7 @@ def parse_task_from_polygon(problem_code, polygon_link, author_id):
 	problem.time_limit = problem_parser.get_time_limit()
 	problem.memory_limit = problem_parser.get_memory_limit()
 	problem.group = ProblemGroup.objects.get(name='Uncategorized')
-	problem.points = 0
+	problem.points = 100
 	problem.save()
 	
 	problem.authors.add(author)
@@ -177,7 +177,7 @@ class ProblemXMLParser:
     
     def get_checker_lang(self):
         lang_type = self.root.find("assets/checker/source").get("type")
-        return "CPP20"
+        return "CPP17"
     
     
     def get_yaml_dict(self):

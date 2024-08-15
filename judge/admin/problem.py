@@ -144,6 +144,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     list_filter = ('is_public', ProblemCreatorListFilter)
+    change_list_template = 'admin/judge/problem/change_list.html'
+
     form = ProblemForm
     date_hierarchy = 'date'
 

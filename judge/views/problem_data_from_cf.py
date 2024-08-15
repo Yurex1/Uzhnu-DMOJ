@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.contrib.auth.mixins import PermissionRequiredMixin
+import time
 
 class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
     permission_required = 'judge.add_problem'
@@ -23,8 +24,7 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         polygon_link = request.POST.get('polygon_link')
         
         profile_id = get_profile(request).id
-        parse_task_from_polygon.delay(problem_code, polygon_link, profile_id)
+        parse_task_from_polygon(problem_code, polygon_link, profile_id)
         # parse_task_from_polygon(problem_code, polygon_link, profile_id)
-
         return HttpResponseRedirect(f"/problem/{problem_code}/test_data")
     

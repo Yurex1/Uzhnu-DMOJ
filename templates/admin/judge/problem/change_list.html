@@ -1,0 +1,11 @@
+{% extends "reversion/change_list.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+{{ block.super }}
+<li>
+    <a href="/problems/new/cf" class="ratealllink">
+        Add problem from CF
+    </a>
+</li>
+{% endblock %}
